@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
-import '../styles/components/Payment.css';
+import { Helmet } from 'react-helmet'
 import { PayPalButton } from 'react-paypal-button'
 import { useHistory } from 'react-router-dom'
 import { AppContext } from '../context/AppContext'
 import { handleSumTotal } from '../utils/handleSumTotal'
+import '../styles/components/Payment.css';
 
 export const Payment = () => {
   const {state: { cart, buyer },  addNewOrder} = useContext(AppContext)
@@ -33,34 +34,40 @@ export const Payment = () => {
   }
 
   return (
-    <div className="Payment">
-      <div className="Payment-content">
-        <h3>Resumen del pedido:</h3>
-        {cart.map(item => {return (
-          <div className="Payment-item" key={item.title}>
-            <div className="Payment-element">
-              <h4>{item.title}</h4>
-              <span>
-                $
-                {item.price}
-              </span>
+    <>
+      <Helmet>
+        <title>Platzi Conf Merch - Payment</title>
+      </Helmet>
+      <div className="Payment">
+        <div className="Payment-content">
+          <h3>Resumen del pedido:</h3>
+          {cart.map(item => {return (
+            <div className="Payment-item" key={item.title}>
+              <div className="Payment-element">
+                <h4>{item.title}</h4>
+                <span>
+                  $
+                  {item.price}
+                </span>
+              </div>
             </div>
-          </div>
         )})}
-        <div className="Payment-button">
-          <PayPalButton
-            paypalOptions={paypalOptions}
-            buttonStyles={buttonStyles}
-            amount={handleSumTotal(cart)}
-            onPaymentStart={() => {return console.log('Start Payment')}}
-            onPaymentSuccess={data => {return handlePaymentSuccess(data)}}
-            onPaymentError={error => {return console.log(error)}}
-            onPaymentCancel={data => {return console.log(data)}}
-          />
+          <div className="Payment-button">
+            <PayPalButton
+              paypalOptions={paypalOptions}
+              buttonStyles={buttonStyles}
+              amount={handleSumTotal(cart)}
+              onPaymentStart={() => {return console.log('Start Payment')}}
+              onPaymentSuccess={data => {return handlePaymentSuccess(data)}}
+              onPaymentError={error => {return console.log(error)}}
+              onPaymentCancel={data => {return console.log(data)}}
+            />
+          </div>
         </div>
+        <div />
       </div>
-      <div />
-    </div>
+    </>
+   
   );
 };
 
